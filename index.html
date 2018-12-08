@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+	<div id="root">
+
+		<input id="input" type="text" placeholder="Entrer une tâche" v-model="newTask">
+
+		<button @click="addTask">Ajouter une tâche</button>
+
+		<p>Tâches en cours</p>
+
+		<ul>
+			
+			<li v-for='task in tasks' v-text="task"></li>
+
+		</ul>
+
+
+
+
+		<p>Tâches réalisées</p>
+
+		
+
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+
+	
+
+	<script>
+		
+		var app = new Vue({
+
+			el: '#root',
+
+			data: {
+
+				newTask: "",
+
+				tasks: []
+			},
+
+			methods: {
+
+				addTask() {
+					this.tasks.push(this.newTask);
+					this.newTask='';
+				}	
+			}
+		})
+
+		
+
+	</script>
+
+
+</body>
+</html>
