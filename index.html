@@ -68,7 +68,7 @@
 
 				taskDone(task) {
 					//this.onGoingTasks.pop(task);
-					for( var i = this.onGoingTasks.length-1; i--;){
+					for( var i = this.onGoingTasks.length; i--;){
 					if ( this.onGoingTasks[i] === task) this.onGoingTasks.splice(i, 1);
 					}
 
