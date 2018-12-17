@@ -67,7 +67,11 @@
 				},
 
 				taskDone(task) {
-					this.onGoingTasks.pop(task);
+					//this.onGoingTasks.pop(task);
+					for( var i = this.onGoingTasks.length-1; i--;){
+					if ( this.onGoingTasks[i] === task) this.onGoingTasks.splice(i, 1);
+					}
+
 					this.doneTasks.push(task);
 				}	
 			}
