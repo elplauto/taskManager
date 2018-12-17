@@ -7,30 +7,41 @@
 
 	<div id="root">
 
-		<input id="input" type="text" placeholder="Entrer une tâche" v-model="newTask">
+		<input id="input" type="text" placeholder="Entrer une tâche" v-model="newTask" @keyup.enter="addTask">
 
-		<button @click="addTask">Ajouter une tâche</button>
+		<button @click="addTask" >Ajouter une tâche</button>
 
 		<p>Tâches en cours</p>
 
 		<ul>
 			
-			<li v-for='task in tasks' v-text="task"></li>
+			<li v-for='task in onGoingTasks'>
+
+				{{ task }}
+
+				<button @click="taskDone(task)">done</button>
+
+			</li>
 
 		</ul>
 
-
-
-
 		<p>Tâches réalisées</p>
+
+		<ul>
+			
+			<li v-for='task in doneTasks'>
+
+				{{ task }}
+
+			</li>
+
+		</ul>
 
 		
 
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-
-	
 
 	<script>
 		
@@ -40,16 +51,24 @@
 
 			data: {
 
-				newTask: "",
+				newTask: "" ,
 
-				tasks: []
+				onGoingTasks: [],
+
+				doneTasks: []
+
 			},
 
 			methods: {
 
 				addTask() {
-					this.tasks.push(this.newTask);
+					this.onGoingTasks.push(this.newTask);
 					this.newTask='';
+				},
+
+				taskDone(task) {
+					this.onGoingTasks.pop(task);
+					this.doneTasks.push(task);
 				}	
 			}
 		})
