@@ -1,37 +1,59 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title></title>
+
+	<title>Task manager</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+
 </head>
 <body>
 
 	<div id="root">
 
-		<input id="input" type="text" placeholder="Entrer une tâche" v-model="newTask" @keyup.enter="addTask">
+		<h1>Gestionnaire de tâche</h1>
 
-		<button @click="addTask" >Ajouter une tâche</button>
+		<input type="text" placeholder="Nom de la tâche" v-model="newTaskName">
 
-		<p>Tâches en cours</p>
+		<input type="text" placeholder="Durée de la tâche" v-model="newTaskLength">
+
+		<button @click="addTask" >Ajouter</button>
+
+		<h3>Tâches en cours</h3>
 
 		<ul>
 			
-			<li v-for='task in onGoingTasks'>
+			<li v-for='task in tasks' v-if="task.complete == false">
+					
+					{{ task.name }}
 
-				{{ task }}
+					&emsp;
 
-				<button @click="taskDone(task)">done</button>
+					( {{ task.length }})
 
+					&emsp;
+
+					<button @click="taskComplete(task)">done</button>
+					<button @click="deleteTask(task)">delete</button>				
 			</li>
 
 		</ul>
 
-		<p>Tâches réalisées</p>
+		<h3>Tâches réalisées</h3>
 
 		<ul>
 			
-			<li v-for='task in doneTasks'>
+			<li v-for='task in tasks' v-if="task.complete == true">
+					
+					{{ task.name }}
 
-				{{ task }}
+					&emsp;
+
+					( {{ task.length }})
+
+					&emsp;
+
+					<button @click="deleteTask(task)">delete</button>
 
 			</li>
 
@@ -44,6 +66,15 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 
 	<script>
+
+		class Task {
+			constructor(name,length) {
+				this.name=name;
+				this.length=length;
+				this.complete=false;
+				this.date=new Date();
+			}
+		}
 		
 		var app = new Vue({
 
@@ -51,29 +82,58 @@
 
 			data: {
 
-				newTask: "" ,
+				newTaskName: "" ,
 
-				onGoingTasks: [],
+				newTaskLength: "" ,
 
-				doneTasks: []
+				tasks: [],
 
 			},
 
 			methods: {
 
-				addTask() {
-					this.onGoingTasks.push(this.newTask);
-					this.newTask='';
+				tacheDejaExistente() {
+					for( var i = 0; i < this.tasks.length; i++){
+						if ( this.tasks[i].name == this.newTaskName) {
+							return true;
+						}
+					}
+					return false;
 				},
 
-				taskDone(task) {
-					//this.onGoingTasks.pop(task);
-					for( var i = this.onGoingTasks.length; i--;){
-					if ( this.onGoingTasks[i] === task) this.onGoingTasks.splice(i, 1);
+				addTask() {
+					if (this.newTaskName == '') {
+						alert('Veuillez donner un nom à la tâche');
 					}
+					else if (this.tacheDejaExistente()) {
+						alert("Une tâche porte déja le même nom");
+					}
+					else if (this.newTaskLength == '') {
+						alert('Veullez donner une durée à la tâche');
+					}
+					else {	
+						this.tasks.push(new Task(this.newTaskName,this.newTaskLength));
+						this.newTaskName='';
+						this.newTaskLength='';
+					}
+				},
 
-					this.doneTasks.push(task);
-				}	
+				taskComplete(task) {
+					for( var i = 0; i < this.tasks.length; i++){
+						if ( this.tasks[i] === task) {
+							this.tasks[i].complete = true;
+						}
+					}
+				},
+
+				deleteTask(task) {
+					for( var i = 0; i < this.tasks.length; i++){
+						if ( this.tasks[i] === task) {
+							this.tasks.splice(i,1);
+						}
+					}
+				}
+				
 			}
 		})
 
